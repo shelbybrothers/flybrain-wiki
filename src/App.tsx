@@ -4,6 +4,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Brain, Check, CheckCircl
 import BrainViewer from './BrainViewer';
 import AgentLab from './AgentLab';
 import TaskDetail from './TaskDetail';
+import { CONTRACT_ADDRESS } from './config';
 import { circuits, isComplete, localDate, parseTasks, planTask, type Circuit, type Task } from './model';
 import { connectWallet, recordReceipt, checkReceipt, type ChainKey } from './chain';
 
@@ -135,6 +136,7 @@ export default function App() {
     <header className="site-header">
       <button className="mobile-menu icon-button" aria-label="Open navigation" onClick={() => setMobileMenu(true)}><Menu size={21} /></button>
       <a className="brand-link" href="#overview" onClick={() => setTab('article')}><Logo /></a>
+      <div className="header-tools">
       <div className="search-wrap" onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setShowSearch(false); }}>
         <Search size={17} /><input id="wiki-search" role="combobox" aria-label="Search FlyBrain Wiki" aria-expanded={showSearch} aria-controls="search-results" aria-autocomplete="list" aria-activedescendant={showSearch && searchItems[searchIndex] ? `search-result-${searchIndex}` : undefined} placeholder="Search the wiki or your tasks" value={search} onFocus={() => setShowSearch(true)} onChange={e => { setSearch(e.target.value); setSearchIndex(0); setShowSearch(true); }} onKeyDown={e => {
           if (e.key === 'ArrowDown') { e.preventDefault(); setSearchIndex(i => Math.min(i + 1, Math.min(searchItems.length, 12) - 1)); }
@@ -142,6 +144,8 @@ export default function App() {
           if (e.key === 'Enter' && searchItems[searchIndex]) { e.preventDefault(); chooseSearch(searchItems[searchIndex]); }
         }} /><kbd>⌘ K</kbd>
         {showSearch && <div className="search-results" id="search-results" role="listbox"><span className="eyebrow">{search ? 'SEARCH RESULTS' : 'JUMP TO SOMETHING'}</span>{searchItems.length ? searchItems.slice(0, 12).map((item, index) => <button role="option" aria-selected={index === searchIndex} id={`search-result-${index}`} className={index === searchIndex ? 'highlighted' : ''} key={item.id} onMouseEnter={() => setSearchIndex(index)} onClick={() => chooseSearch(item)}>{item.type === 'Your task' ? <ListTodo size={16} /> : <BookOpen size={16} />}<span>{item.title}<small>{item.type}</small></span><ArrowRight size={14} /></button>) : <p>No matches yet. Try “tasks” or “brain”.</p>}<div className="search-footnote">↑ ↓ to navigate <span>↵ to open</span></div></div>}
+      </div>
+      <button className="header-ca" type="button" disabled={!CONTRACT_ADDRESS} title={CONTRACT_ADDRESS || 'Contract address is being updated'} aria-label={CONTRACT_ADDRESS ? 'Copy contract address' : 'Copy CA — updating..'} onClick={() => { if (CONTRACT_ADDRESS) void navigator.clipboard.writeText(CONTRACT_ADDRESS).then(() => setNotice('Contract address copied.')).catch(() => setNotice('Could not copy the contract address. Please try again.')); }}><span><span className="header-ca-label">Copy CA</span><span className="header-ca-value">{CONTRACT_ADDRESS ? `${CONTRACT_ADDRESS.slice(0, 6)}…${CONTRACT_ADDRESS.slice(-4)}` : 'updating..'}</span></span><Copy size={14} /></button>
       </div>
       <nav className="header-links"><External href={links.source}>Source</External><External href={links.x}><span className="x-symbol">𝕏</span>Follow the experiment</External></nav>
       <button className={`wallet-button ${wallet ? 'connected' : ''}`} aria-label={wallet ? `Manage connected wallet ${wallet.slice(0, 6)}…${wallet.slice(-4)}` : 'Connect wallet'} title={wallet ? 'Manage connected wallet' : 'Connect wallet'} onClick={() => { setWalletError(''); setModal('wallet'); }}><Wallet size={15} /><span className="wallet-button-label">{wallet ? `${wallet.slice(0, 6)}…${wallet.slice(-4)}` : 'Connect wallet'}</span></button>
