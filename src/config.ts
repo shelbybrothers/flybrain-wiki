@@ -1,2 +1,2 @@
-// Leave empty until the project owner supplies the real contract address.
-export const CONTRACT_ADDRESS: string = '';
+// Contract address supplied by the project owner.
+export const CONTRACT_ADDRESS: string = '0xc851eCe2ae94736dd7111b0032c04bc42D4E2835';
