@@ -16,9 +16,16 @@ export function classifyTask(title: string): Circuit {
   if (/research|explore|find|compare|investigate|source|analy[sz]/i.test(title)) return 'research';
   return 'planning';
 }
+export function isValidTaskDate(value: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(`${value}T12:00:00`);
+  return Number.isFinite(date.getTime()) && localDate(date) === value;
+}
 export function planTask(title: string, due = localDate(), circuit?: Circuit): Task {
   const clean = title.trim();
   if (!clean || clean.length > 240) throw new Error('Use a task between 1 and 240 characters.');
+  if (!isValidTaskDate(due)) throw new Error('Choose a valid date for your plan.');
+  if (circuit && !Object.hasOwn(circuits, circuit)) throw new Error('Choose one of the available thinking circuits.');
   const category = circuit ?? classifyTask(clean);
   const plans: Record<Circuit, string[]> = {
     research: [`Define the question and scope for “${clean}”.`, 'Find two primary sources; capture evidence, dates, and links.', 'Compare the findings and write a brief conclusion with open questions.'],
@@ -41,7 +48,7 @@ export function parseTasks(raw: string | null): Task[] {
     return data.filter((item): item is Task => {
       if (!item || typeof item !== 'object') return false;
       const t = item as Task;
-      return typeof t.id === 'string' && typeof t.title === 'string' && t.title.length <= 240 && Object.hasOwn(circuits, t.circuit) && typeof t.createdAt === 'string' && typeof t.due === 'string' && Array.isArray(t.steps) && t.steps.length > 0 && t.steps.every(s => typeof s === 'string') && Array.isArray(t.checked) && t.checked.length === t.steps.length && t.checked.every(s => typeof s === 'boolean') && (!t.receipt || (/^0x[0-9a-f]{64}$/i.test(t.receipt.hash) && /^0x[0-9a-f]{40}$/i.test(t.receipt.account) && typeof t.receipt.digest === 'string' && [4663, 46630].includes(t.receipt.chainId) && ['pending', 'confirmed', 'failed'].includes(t.receipt.status)));
+      return typeof t.id === 'string' && typeof t.title === 'string' && !!t.title.trim() && t.title.length <= 240 && Object.hasOwn(circuits, t.circuit) && typeof t.createdAt === 'string' && typeof t.due === 'string' && isValidTaskDate(t.due) && Array.isArray(t.steps) && t.steps.length > 0 && t.steps.every(s => typeof s === 'string') && Array.isArray(t.checked) && t.checked.length === t.steps.length && t.checked.every(s => typeof s === 'boolean') && (!t.receipt || (/^0x[0-9a-f]{64}$/i.test(t.receipt.hash) && /^0x[0-9a-f]{40}$/i.test(t.receipt.account) && typeof t.receipt.digest === 'string' && [4663, 46630].includes(t.receipt.chainId) && ['pending', 'confirmed', 'failed'].includes(t.receipt.status)));
     });
   } catch { return []; }
 }

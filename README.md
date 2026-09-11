@@ -8,8 +8,12 @@ A Wikipedia-inspired daily-task workspace with an interactive schematic fly brai
 
 - The provided `flybrain.png` is used for the logo, article image, favicon, and touch icon.
 - Responsive article layout, contents navigation, search, reading preferences, and reference links.
-- Interactive canvas brain: drag rotation, zoom, region selection, circuit map, motion toggle, expanded view, and reduced-motion support.
-- Daily task plans with editable steps, completion tracking, date filters, device persistence, and JSON export.
+- An editorial encyclopedia layout with an agent dossier, readable typography, responsive navigation, and keyboard-driven search.
+- Interactive canvas brain: hover and click regions, drag or keyboard rotation, three camera presets, zoom, expanded view, and reduced-motion support.
+- A 192-neuron synthetic LIF network: adjust stimulus strength, send a pulse, inspect simulated activity, switch between anatomy and connectivity, pause, and reset.
+- Selected brain regions can be used directly as planning circuits.
+- Daily task plans with editable titles, dates, and steps, completion tracking, filters, device persistence, JSON export, and deletion with undo.
+- Focus sessions of 5, 15, or 25 minutes, with pause/reset and deadline-based timing that survives tab inactivity and reopening the task.
 - Browser wallet connection, verified chain switching, hash-only zero-value self-transactions, receipt confirmation polling, and explorer links.
 - Testnet is the default; mainnet can be selected in the wallet dialog.
 - Community links point to https://x.com/flybrainwiki.
@@ -33,6 +37,8 @@ Vercel detects Vite; `vercel.json` supplies the build and output directory. No s
 The browser app uses deterministic keyword classification and three-step planning templates. Users do the work and can edit every suggested step. It is not an LLM, an autonomous external-task executor, or a browser port of the full research simulation.
 
 The canvas geometry is synthetic. Brain regions serve as interface metaphors, not demonstrated biological mappings to human productivity tasks. The ~138K neuron and ~5M synapse counts describe the referenced research connectome, not this display.
+
+The interactive network contains 192 synthetic neurons in four groups. Its LIF dynamics run in 0.5 model-millisecond steps with generated connections. Stimulation and the activity trace reflect this small local simulation, not a measured fly brain. Rendering and simulation pause when the explorer is outside the viewport or the page is hidden; focus timers use wall-clock deadlines independently.
 
 Tasks are stored only in this browser's local storage. There is no cross-device account or background scheduler. Export tasks regularly, especially after recording a receipt. Clearing browser data removes local plans. There are no fake task completions or synthetic transaction hashes.
 
@@ -73,7 +79,7 @@ Independent project; not affiliated with Wikipedia, Robinhood, Virtual Fly Brain
 
 ## Validation
 
-`npm test` checks planning, storage recovery, receipt determinism, chain-add/switch handling, rejection of wrong-chain writes, transaction privacy and zero-value semantics, wallet cancellation, and receipt-status handling. `npm run build` checks TypeScript and creates the production bundle. Browser wallet signing and WebMCP integration require a supported client and were not exercised against a live wallet during deployment.
+`npm test` runs 15 checks covering planning, calendar validation, storage recovery, deterministic stimulus response, neural propagation and return to rest, focus timer persistence/pause/resume, receipt determinism, chain-add/switch handling, wrong-chain rejection, transaction privacy and zero-value semantics, wallet cancellation, and receipt-status handling. `npm run build` checks TypeScript and creates the production bundle. Browser wallet signing and WebMCP integration require a supported client and were not exercised against a live wallet during deployment.
 
 ## License
 
