@@ -41,11 +41,12 @@ section[id] { scroll-margin-top: 28px; }
 
 /* The encyclopedia frame */
 .site-header { max-width: 1600px; padding: 25px 44px; margin: auto; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 25px; position: relative; z-index: 20; }
-.brand-link { flex-shrink: 0; color: var(--ink); }
+.brand-link { min-width: 0; max-width: 100%; color: var(--ink); }
 .brand-link:hover { text-decoration: none; }
-.brand { display: flex; align-items: center; gap: 9px; }
-.brand-image { position: relative; height: 47px; width: 61px; overflow: hidden; }
-.brand-image img { position: absolute; width: 80px; max-width: none; left: -9px; top: -13px; }
+.brand { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.brand-copy { min-width: 0; }
+.brand-image { flex: 0 0 auto; height: 64px; width: 64px; }
+.brand-image img { width: 100%; height: 100%; object-fit: contain; }
 .wordmark { display: block; font: 29px/1.1 Georgia, serif; letter-spacing: -1px; }
 .wordmark b { font-weight: 400; font-variant: small-caps; }
 .brand-tagline { display: block; font: 10px Georgia, serif; color: #676d76; letter-spacing: .13px; margin-top: 5px; }
@@ -55,7 +56,7 @@ section[id] { scroll-margin-top: 28px; }
 kbd { font: 11px 'DM Sans', sans-serif; white-space: nowrap; border: 1px solid #e4e7ee; border-radius: 3px; padding: 1px 5px; color: #666d76; }
 .header-links { display: flex; align-items: center; justify-content: flex-end; gap: 25px; margin-left: auto; white-space: nowrap; font-size: 12px; }
 .header-links a { color: #656e7b; gap: 6px; }
-.wallet-button { border: 1px solid #d2d9e3; border-radius: 5px; padding: 10px 13px; white-space: nowrap; font-size: 12px; font-weight: 500; color: #4d5e76; }
+.wallet-button { flex-shrink: 0; border: 1px solid #d2d9e3; border-radius: 5px; padding: 10px 13px; white-space: nowrap; font-size: 12px; font-weight: 500; color: #4d5e76; }
 .wallet-button:hover { background: #f3f6fb; }
 .wallet-button.connected { border-color: #b6d0c0; background: #f7faf7; color: #47765c; }
 .mobile-menu { display: none; }
@@ -75,8 +76,8 @@ kbd { font: 11px 'DM Sans', sans-serif; white-space: nowrap; border: 1px solid #
 .contents-sidebar>a { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #636f7d; margin-bottom: 17px; }
 .contents-sidebar>a svg:last-child { margin-left: auto; margin-right: 7px; width: 10px; color: #676d77; }
 .sidebar-note { border-top: 1px solid var(--border); margin: 46px 14px 0 0; padding-top: 29px; }
-.note-orbit { width: 58px; height: 52px; position: relative; overflow: hidden; }
-.note-orbit img { width: 68px; max-width: none; position: absolute; left: -6px; top: -7px; mix-blend-mode: multiply; }
+.note-orbit { width: 58px; height: 58px; }
+.note-orbit img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
 .sidebar-note p { font: 17px/1.7 var(--serif); letter-spacing: -.5px; color: #556273; margin: 14px 0 13px; }
 .sidebar-note p em { color: #656e79; font-size: 15px; }
 .sidebar-note>span { color: #656d79; font-size: 12px; line-height: 1.9; }
@@ -321,8 +322,8 @@ kbd { font: 11px 'DM Sans', sans-serif; white-space: nowrap; border: 1px solid #
 .references p { color: #646f7d; font-size: 12px; margin-top: 5px; line-height: 1.8; }
 .article-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; border-top: 1px solid #dce4ee; margin: 39px 0 0; padding: 25px 0 28px; }
 .article-footer>div { display: flex; align-items: center; gap: 9px; }
-.footer-brand-image { height: 37px; width: 45px; overflow: hidden; position: relative; }
-.footer-brand-image img { position: absolute; width: 58px; max-width: none; top: -9px; left: -6px; }
+.footer-brand-image { flex: 0 0 auto; height: 45px; width: 45px; }
+.footer-brand-image img { width: 100%; height: 100%; object-fit: contain; }
 .article-footer strong { display: block; font: 15px Georgia,serif; color: #5b6e83; }
 .article-footer small { display: block; font-size: 12px; margin-top: 2px; color: #656d7a; }
 .article-footer>p { font-size: 12px; color: #636d7b; }
@@ -572,8 +573,7 @@ kbd { font: 11px 'DM Sans', sans-serif; white-space: nowrap; border: 1px solid #
   .page-shell { display: block; max-width: 1000px; padding: 29px 30px 0; }
   .site-header { padding: 21px 26px; gap: 15px; }
   .search-wrap { margin-left: auto; }
-  .brand-image { width: 50px; }
-  .brand-image img { width: 72px; left: -11px; top: -10px; }
+  .brand-image { width: 50px; height: 50px; }
   .wordmark { font-size: 26px; }
   .brand-tagline { font-size: 10px; }
   .header-links { display: none; }
@@ -585,7 +585,7 @@ kbd { font: 11px 'DM Sans', sans-serif; white-space: nowrap; border: 1px solid #
 @media(max-width:780px) {
   .site-header { flex-wrap: wrap; padding: 16px 20px; gap: 11px; }
   .brand-tagline { font-size: 10px; }
-  .brand-image { width: 48px; height: 42px; }
+  .brand-image { width: 48px; height: 48px; }
   .wordmark { font-size: 25px; }
   .wallet-button { margin-left: auto; font-size: 12px; padding: 9px 11px; }
   .search-wrap { order: 4; flex-basis: 100%; max-width: none; height: 39px; margin: 9px 0 0; }
@@ -655,13 +655,14 @@ kbd { font: 11px 'DM Sans', sans-serif; white-space: nowrap; border: 1px solid #
 @media(max-width:520px) {
   .site-header { padding: 14px 16px; gap: 8px; }
   .site-header>.mobile-menu { width: 23px; }
+  .site-header>.brand-link { flex: 1 1 0; }
   .brand { gap: 6px; }
-  .brand-image { width: 38px; height: 36px; }
-  .brand-image img { width: 57px; left: -9px; top: -8px; }
+  .brand-image { width: 40px; height: 40px; }
   .wordmark { font-size: 22px; }
   .brand-tagline { font-size: 10px; margin-top: 4px; }
-  .wallet-button { font-size: 12px; padding: 8px 9px; gap: 5px; }
-  .wallet-button>svg { width: 12px; }
+  .wallet-button { width: 36px; height: 36px; padding: 8px; gap: 0; }
+  .wallet-button-label { display: none; }
+  .wallet-button>svg { width: 16px; height: 16px; }
   .search-wrap { margin-top: 10px; }
   .page-shell { padding: 23px 17px 0; }
   .breadcrumb { font-size: 12px; gap: 7px; margin-bottom: 21px; }
@@ -824,7 +825,6 @@ kbd { font: 11px 'DM Sans', sans-serif; white-space: nowrap; border: 1px solid #
   .brain-dialog .simulation-console { gap: 10px; }
 }
 @media(max-width:360px) {
-  .wallet-button>svg { display: none; }
   .brand-tagline { display: none; }
   .activity-trace { display: none; }
   .brain-stage { height: 285px; }

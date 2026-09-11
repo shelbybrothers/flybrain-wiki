@@ -17,7 +17,7 @@ const links = {
   x: 'https://x.com/flybrainwiki',
 };
 function External({ href, children, className = '' }: { href: string; children: ReactNode; className?: string }) { return <a className={className} href={href} target="_blank" rel="noreferrer">{children}<ArrowUpRight size={13} /></a>; }
-function Logo({ large = false }: { large?: boolean }) { return <div className={`brand ${large ? 'brand-large' : ''}`}><div className="brand-image"><img src="/flybrain.png" alt="FlyBrain puzzle brain logo" /></div><div><span className="wordmark">FlyBrain <b>Wiki</b></span><span className="brand-tagline">The open intelligence encyclopedia</span></div></div>; }
+function Logo({ large = false }: { large?: boolean }) { return <div className={`brand ${large ? 'brand-large' : ''}`}><div className="brand-image"><img src="/flybrain.png" alt="FlyBrain puzzle brain logo" width="1254" height="1254" /></div><div className="brand-copy"><span className="wordmark">FlyBrain <b>Wiki</b></span><span className="brand-tagline">The open intelligence encyclopedia</span></div></div>; }
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => { const dialog = ref.current; const overflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; dialog?.showModal(); return () => { dialog?.close(); document.body.style.overflow = overflow; }; }, []);
@@ -144,7 +144,7 @@ export default function App() {
         {showSearch && <div className="search-results" id="search-results" role="listbox"><span className="eyebrow">{search ? 'SEARCH RESULTS' : 'JUMP TO SOMETHING'}</span>{searchItems.length ? searchItems.slice(0, 12).map((item, index) => <button role="option" aria-selected={index === searchIndex} id={`search-result-${index}`} className={index === searchIndex ? 'highlighted' : ''} key={item.id} onMouseEnter={() => setSearchIndex(index)} onClick={() => chooseSearch(item)}>{item.type === 'Your task' ? <ListTodo size={16} /> : <BookOpen size={16} />}<span>{item.title}<small>{item.type}</small></span><ArrowRight size={14} /></button>) : <p>No matches yet. Try “tasks” or “brain”.</p>}<div className="search-footnote">↑ ↓ to navigate <span>↵ to open</span></div></div>}
       </div>
       <nav className="header-links"><External href={links.source}>Source</External><External href={links.x}><span className="x-symbol">𝕏</span>Follow the experiment</External></nav>
-      <button className={`wallet-button ${wallet ? 'connected' : ''}`} onClick={() => { setWalletError(''); setModal('wallet'); }}><Wallet size={15} />{wallet ? `${wallet.slice(0, 6)}…${wallet.slice(-4)}` : 'Connect wallet'}</button>
+      <button className={`wallet-button ${wallet ? 'connected' : ''}`} aria-label={wallet ? `Manage connected wallet ${wallet.slice(0, 6)}…${wallet.slice(-4)}` : 'Connect wallet'} title={wallet ? 'Manage connected wallet' : 'Connect wallet'} onClick={() => { setWalletError(''); setModal('wallet'); }}><Wallet size={15} /><span className="wallet-button-label">{wallet ? `${wallet.slice(0, 6)}…${wallet.slice(-4)}` : 'Connect wallet'}</span></button>
     </header>
     <div className="page-shell">
       <aside className="contents-sidebar">
