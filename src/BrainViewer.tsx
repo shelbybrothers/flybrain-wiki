@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { Activity, ArrowRight, Check, Expand, Layers3, Minus, Move, Network, Pause, Play, Plus, RotateCcw, X, Zap } from 'lucide-react';
 import { circuits, type Circuit } from './model';
@@ -42,7 +42,8 @@ function makeBrain() {
   return { points, links };
 }
 const brain = makeBrain();
-export default function BrainViewer({ selected, onSelect, onUseCircuit }: { selected: Circuit | 'all'; onSelect: (value: Circuit | 'all') => void; onUseCircuit: (value: Circuit) => void }) {
+export default function BrainViewer({ selected, onSelect, onUseCircuit, compact = false, externalPulse = 0, externalPaused = false }: { selected: Circuit | 'all'; onSelect: (value: Circuit | 'all') => void; onUseCircuit: (value: Circuit) => void; compact?: boolean; externalPulse?: number; externalPaused?: boolean }) {
+  const stimulusId = useId();
   const canvasRef = useRef<HTMLCanvasElement>(null), dialogRef = useRef<HTMLDialogElement>(null);
   const engine = useRef(createNeuralState()), angle = useRef({ x: -.13, y: .14 });
   const drag = useRef<{ x: number; y: number; distance: number } | null>(null), stimulusEnds = useRef(0);
@@ -54,6 +55,11 @@ export default function BrainViewer({ selected, onSelect, onUseCircuit }: { sele
   const settings = useRef({ selected, zoom, playing, mode, intensity, hovered });
   settings.current = { selected, zoom, playing, mode, intensity, hovered };
   const color = selected === 'all' ? '#acd5c4' : circuits[selected].color;
+  useEffect(() => {
+    if (!compact) return;
+    setPlaying(!externalPaused);
+    if (externalPulse > 0 && !externalPaused) { stimulusEnds.current = engine.current.time + 120; setStimulating(true); }
+  }, [compact, externalPulse, externalPaused]);
   useEffect(() => {
     const canvas = canvasRef.current, ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) return;
@@ -152,7 +158,7 @@ export default function BrainViewer({ selected, onSelect, onUseCircuit }: { sele
   function reset() { engine.current = createNeuralState(); stimulusEnds.current = 0; setStimulating(false); setTelemetry({ spikes: 0, time: 0, history: Array(64).fill(0) }); setPreset('Anterior'); }
   const graphMax = Math.max(12, ...telemetry.history);
   const graphPath = telemetry.history.map((value, i) => `${i === 0 ? 'M' : 'L'} ${i * 3} ${30 - value / graphMax * 26}`).join(' ');
-  const content = <div className={`brain-viewer ${expanded ? 'is-expanded' : ''}`} style={{ '--region-color': color } as CSSProperties}>
+  const content = <div className={`brain-viewer ${expanded ? 'is-expanded' : ''} ${compact ? 'is-compact' : ''}`} style={{ '--region-color': color } as CSSProperties}>
     <div className="viewer-top"><div className="viewer-tabs" role="group" aria-label="Brain view"><button aria-pressed={mode === 'anatomy'} className={mode === 'anatomy' ? 'selected' : ''} onClick={() => setMode('anatomy')}><Layers3 size={14} />Anatomy</button><button aria-pressed={mode === 'network'} className={mode === 'network' ? 'selected' : ''} onClick={() => setMode('network')}><Network size={14} />Neural circuit</button></div><div className="viewer-top-right"><span className="viewer-model">SYNTHETIC MODEL</span><button className="viewer-expand" aria-label={expanded ? 'Close expanded brain explorer' : 'Expand brain explorer'} onClick={() => setExpanded(e => !e)}>{expanded ? <X size={16} /> : <Expand size={15} />}</button></div></div>
     <div className="brain-stage">
       <div className="specimen-label"><span>SPECIMEN / 001</span><em>Drosophila melanogaster</em></div>
@@ -176,7 +182,7 @@ export default function BrainViewer({ selected, onSelect, onUseCircuit }: { sele
       <div className="viewer-hint"><Move size={12} />Drag to rotate <span>·</span> Click a region to explore</div>
       <div className="model-id">LIF / 192<span>{playing ? 'SIMULATION RUNNING' : 'SIMULATION PAUSED'}</span></div>
     </div>
-    <div className="simulation-console"><div className="stimulus-control"><label htmlFor={`stimulus-${expanded}`}><Zap size={13} />Stimulus strength <b>{intensity}%</b></label><input id={`stimulus-${expanded}`} type="range" min="0" max="100" step="5" value={intensity} onChange={e => setIntensity(Number(e.target.value))} /></div><button className={`stimulate-button ${stimulating ? 'stimulating' : ''}`} onClick={stimulate}><Zap size={14} />{stimulating ? 'Stimulating…' : 'Send stimulus'}</button><div className="activity-trace"><svg viewBox="0 0 192 34" aria-label={`${telemetry.spikes} spikes in the latest sample`} role="img"><path d={graphPath} fill="none" stroke="currentColor" strokeWidth="1.4" /></svg><span><Activity size={11} />{telemetry.spikes} spikes / sample</span></div></div>
+    <div className="simulation-console"><div className="stimulus-control"><label htmlFor={stimulusId}><Zap size={13} />Stimulus strength <b>{intensity}%</b></label><input id={stimulusId} type="range" min="0" max="100" step="5" value={intensity} onChange={e => setIntensity(Number(e.target.value))} /></div><button className={`stimulate-button ${stimulating ? 'stimulating' : ''}`} onClick={stimulate}><Zap size={14} />{stimulating ? 'Stimulating…' : 'Send stimulus'}</button><div className="activity-trace"><svg viewBox="0 0 192 34" aria-label={`${telemetry.spikes} spikes in the latest sample`} role="img"><path d={graphPath} fill="none" stroke="currentColor" strokeWidth="1.4" /></svg><span><Activity size={11} />{telemetry.spikes} spikes / sample</span></div></div>
     <div className="region-legend"><button aria-pressed={selected === 'all'} className={selected === 'all' ? 'active' : ''} onClick={() => onSelect('all')}><i className="all-regions" />Whole brain</button>{Object.entries(circuits).map(([key, c]) => <button aria-pressed={selected === key} className={selected === key ? 'active' : ''} key={key} onClick={() => onSelect(key as Circuit)}><i style={{ background: c.color }} />{c.region}{selected === key && <Check size={11} />}</button>)}</div>
     <div className={`region-insight ${selected !== 'all' ? 'has-selection' : ''}`}><div><span className="eyebrow">{selected === 'all' ? 'EXPLORE THE CONNECTIONS' : 'REGION IN FOCUS'}</span><h3>{selected === 'all' ? 'Every small action starts with a signal.' : circuits[selected].region}</h3><p>{selected === 'all' ? 'Select a region, send a stimulus, and watch activity travel through a small synthetic network.' : circuits[selected].description}</p></div>{selected === 'all' ? <span className="insight-number">04<small>regions to explore</small></span> : <button onClick={() => { setExpanded(false); onUseCircuit(selected); }}>Use for {circuits[selected].label.toLowerCase()}<ArrowRight size={14} /></button>}</div>
   </div>;

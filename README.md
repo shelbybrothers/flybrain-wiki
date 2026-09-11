@@ -9,6 +9,8 @@ A Wikipedia-inspired daily-task workspace with an interactive schematic fly brai
 - The provided `flybrain.png` is used for the logo, article image, favicon, and touch icon.
 - Responsive article layout, contents navigation, search, reading preferences, and reference links.
 - An editorial encyclopedia layout with an agent dossier, readable typography, responsive navigation, and keyboard-driven search.
+- A green-on-black agent lab inspired by [Supabase’s fly demo](https://x.com/supabase/status/2097999894632149229): task terminal, synchronized neural panel, and an original illustrated fly over a clickable keyboard.
+- The lab creates real local plans, reveals the generated steps, and opens them in the existing workspace. Pause/replay controls affect presentation only; replay never creates a duplicate task or completes work.
 - Interactive canvas brain: hover and click regions, drag or keyboard rotation, three camera presets, zoom, expanded view, and reduced-motion support.
 - A 192-neuron synthetic LIF network: adjust stimulus strength, send a pulse, inspect simulated activity, switch between anatomy and connectivity, pause, and reset.
 - Selected brain regions can be used directly as planning circuits.
@@ -39,6 +41,8 @@ The browser app uses deterministic keyword classification and three-step plannin
 The canvas geometry is synthetic. Brain regions serve as interface metaphors, not demonstrated biological mappings to human productivity tasks. The ~138K neuron and ~5M synapse counts describe the referenced research connectome, not this display.
 
 The interactive network contains 192 synthetic neurons in four groups. Its LIF dynamics run in 0.5 model-millisecond steps with generated connections. Stimulation and the activity trace reflect this small local simulation, not a measured fly brain. Rendering and simulation pause when the explorer is outside the viewport or the page is hidden; focus timers use wall-clock deadlines independently.
+
+The lab’s keyboard and terminal playback send synthetic stimuli to the compact neural viewer. The fly is an original AI-generated raster illustration with a small typing animation, not a simulated body or an autonomous database operator. Reduced-motion preferences show the complete plan immediately. The scientific explorer remains a separate interactive view below the lab.
 
 Tasks are stored only in this browser's local storage. There is no cross-device account or background scheduler. Export tasks regularly, especially after recording a receipt. Clearing browser data removes local plans. There are no fake task completions or synthetic transaction hashes.
 
@@ -75,7 +79,7 @@ Other references:
 - [Virtual Fly Brain, VFB_00101567](https://v2.virtualflybrain.org/org.geppetto.frontend/geppetto?id=VFB_00101567&i=VFB_00101567)
 - [Aerts Lab Fly Brain Cell Atlas](https://flybrain.aertslab.org/?_inputs_&page=%22HomePage%22)
 
-Independent project; not affiliated with Wikipedia, Robinhood, Virtual Fly Brain, Eon Systems, or Aerts Lab.
+Independent project; not affiliated with Wikipedia, Robinhood, Virtual Fly Brain, Eon Systems, Aerts Lab, or Supabase. The Supabase post is a visual reference only; its video and branding are not bundled into this application.
 
 ## Validation
 
