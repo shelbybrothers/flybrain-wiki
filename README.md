@@ -2,6 +2,8 @@
 
 A Wikipedia-inspired daily-task workspace with an interactive schematic fly brain, editable local task plans, and optional completion receipts on Robinhood Chain.
 
+[Live site](https://flybrain-wiki.vercel.app) · [Application source](https://github.com/shelbybrothers/flybrain-wiki) · [Follow on X](https://x.com/flybrainwiki)
+
 ## Features
 
 - The provided `flybrain.png` is used for the logo, article image, favicon, and touch icon.
